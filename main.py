@@ -14,6 +14,8 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 import screen_brightness_control as sbc
 import requests
 import yagmail
+from groq import Groq
+from newsapi import NewsApiClient
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -41,6 +43,60 @@ def wish_me():
     else:
         speak("Good Evening!")
     speak("I am Jarvis. Please tell me how may I help you")
+
+
+def chat_with_groq(query):
+    """Sends a query to the Groq API and speaks the response."""
+    try:
+        client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": query,
+                }
+            ],
+            model="meta-llama/llama-4-scout-17b-16e-instruct",
+        )
+        response = chat_completion.choices[0].message.content
+        speak(response)
+    except Exception as e:
+        print(f"Error in chat_with_groq: {e}")
+        speak("Sorry, I could not connect to the chat service.")
+
+
+def get_world_news():
+    """Fetches and speaks the top 5 world news headlines."""
+    try:
+        api_key = os.environ.get('NEWS_API_KEY')
+        if not api_key:
+            speak("The News API key is not configured. Please set the NEWS_API_KEY environment variable.")
+            return
+        newsapi = NewsApiClient(api_key=api_key)
+        top_headlines = newsapi.get_top_headlines(language='en', country='us')
+        speak("Here are the top 5 world news headlines:")
+        for i, article in enumerate(top_headlines['articles'][:5]):
+            speak(f"Number {i+1}: {article['title']}")
+    except Exception as e:
+        print(f"Error in get_world_news: {e}")
+        speak("Sorry, I could not fetch the world news.")
+
+
+def get_financial_news():
+    """Fetches and speaks the top 5 financial news headlines."""
+    try:
+        api_key = os.environ.get('NEWS_API_KEY')
+        if not api_key:
+            speak("The News API key is not configured. Please set the NEWS_API_KEY environment variable.")
+            return
+        newsapi = NewsApiClient(api_key=api_key)
+        top_headlines = newsapi.get_top_headlines(category='business', language='en', country='us')
+        speak("Here are the top 5 financial news headlines:")
+        for i, article in enumerate(top_headlines['articles'][:5]):
+            speak(f"Number {i+1}: {article['title']}")
+    except Exception as e:
+        print(f"Error in get_financial_news: {e}")
+        speak("Sorry, I could not fetch the financial news.")
 
 
 def listen_for_command():
@@ -277,3 +333,12 @@ if __name__ == "__main__":
         elif "exit" in command:
             speak("Goodbye!")
             break
+
+        elif 'world news' in command:
+            get_world_news()
+
+        elif 'financial news' in command:
+            get_financial_news()
+
+        else:
+            chat_with_groq(command)

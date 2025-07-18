@@ -18,6 +18,8 @@ This is a simple AI speech assistant, inspired by J.A.R.V.I.S., that can perform
 *   **Calculator**: Perform basic mathematical calculations.
 *   **Time**: Get the current time.
 *   **Dictionary**: Look up word definitions.
+*   **Chat**: Have a conversation with the assistant.
+*   **News**: Get the latest world and financial news.
 *   **Email**: Send emails through your configured account.
 
 ### Entertainment
@@ -72,6 +74,9 @@ This is a simple AI speech assistant, inspired by J.A.R.V.I.S., that can perform
 
 ### General
 *   `"exit"`: Stops the assistant.
+*   `"world news"`: Get the latest world news headlines.
+*   `"financial news"`: Get the latest financial news headlines.
+*   Any other command will be treated as a chat message.
 
 ## Chrome Profile Configuration
 
@@ -88,6 +93,18 @@ To use a specific Chrome profile for web searches, you need to configure the `ch
     *   Open Google Chrome.
     *   In the address bar, type `chrome://version` and press Enter.
     *   Look for the "Profile Path" field. The profile directory name is the last part of the path (e.g., "Profile 1").
+
+## News API Key Configuration
+
+To use the news functionality, you must set the following environment variable:
+
+*   `NEWS_API_KEY`: Your News API key. You can get a free developer key from [https://newsapi.org/](https://newsapi.org/) by registering for an account.
+
+## Groq API Key Configuration
+
+To use the chat functionality, you must set the following environment variable:
+
+*   `GROQ_API_KEY`: Your Groq Cloud API key.
 
 ## Email Configuration
 
