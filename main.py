@@ -5,6 +5,7 @@ import webbrowser
 import pyautogui
 import time
 import os
+import subprocess
 from playsound import playsound
 import wikipedia
 from ctypes import cast, POINTER
@@ -22,6 +23,13 @@ engine.setProperty('voice', voices[0].id)
 def speak(audio):
     engine.say(audio)
     engine.runAndWait()
+
+
+def open_with_profile(url):
+    """Opens a URL in a specific Chrome profile."""
+    chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+    profile_directory = "Profile 3"
+    subprocess.Popen([chrome_path, f"--profile-directory={profile_directory}", url])
 
 
 def wish_me():
@@ -63,25 +71,25 @@ if __name__ == "__main__":
         if 'search on youtube' in command:
             query = command.replace("search on youtube", "")
             speak(f"Searching for {query} on YouTube")
-            webbrowser.open(f"https://www.youtube.com/results?search_query={query}")
+            open_with_profile(f"https://www.youtube.com/results?search_query={query}")
 
         elif 'open youtube' in command:
             speak("Opening YouTube")
-            webbrowser.open("youtube.com")
+            open_with_profile("https://www.youtube.com")
 
         elif 'search on google' in command:
             query = command.replace("search on google", "")
             speak(f"Searching for {query} on Google")
-            webbrowser.open(f"https://www.google.com/search?q={query}")
+            open_with_profile(f"https://www.google.com/search?q={query}")
 
         elif 'open google' in command:
             speak("Opening Google")
-            webbrowser.open("google.com")
+            open_with_profile("https://www.google.com")
 
         elif 'play on spotify' in command:
             query = command.replace("play on spotify", "")
             speak(f"Playing {query} on Spotify")
-            webbrowser.open(f"https://open.spotify.com/search/{query}")
+            open_with_profile(f"https://open.spotify.com/search/{query}")
             time.sleep(5)  # Wait for the page to load
             pyautogui.click(x=1037, y=574) # Adjust these coordinates if necessary
 

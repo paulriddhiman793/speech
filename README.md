@@ -13,7 +13,7 @@ This is a simple AI speech assistant, inspired by J.A.R.V.I.S., that can perform
 *   **File Search**: Search for files on your computer.
 
 ### Productivity & Information
-*   **Web Search & Browsing**: Open Google and YouTube, and perform searches.
+*   **Web Search & Browsing**: Open Google and YouTube, and perform searches in a specific Chrome profile.
 *   **Wikipedia**: Get summaries from Wikipedia on any topic.
 *   **Calculator**: Perform basic mathematical calculations.
 *   **Time**: Get the current time.
@@ -72,6 +72,22 @@ This is a simple AI speech assistant, inspired by J.A.R.V.I.S., that can perform
 
 ### General
 *   `"exit"`: Stops the assistant.
+
+## Chrome Profile Configuration
+
+To use a specific Chrome profile for web searches, you need to configure the `chrome_path` and `profile_directory` variables in the `open_with_profile` function in `main.py`.
+
+### Finding Your Chrome Path and Profile Directory
+
+1.  **Find the Chrome executable path:**
+    *   Right-click on the Google Chrome shortcut on your desktop or in the Start Menu.
+    *   Select "Properties".
+    *   In the "Shortcut" tab, the "Target" field will contain the full path to the Chrome executable.
+
+2.  **Find the profile directory name:**
+    *   Open Google Chrome.
+    *   In the address bar, type `chrome://version` and press Enter.
+    *   Look for the "Profile Path" field. The profile directory name is the last part of the path (e.g., "Profile 1").
 
 ## Email Configuration
 
