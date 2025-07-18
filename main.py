@@ -2,6 +2,8 @@ import speech_recognition as sr
 import pyttsx3
 import datetime
 import webbrowser
+import pyautogui
+import time
 import os
 from playsound import playsound
 import wikipedia
@@ -75,6 +77,13 @@ if __name__ == "__main__":
         elif 'open google' in command:
             speak("Opening Google")
             webbrowser.open("google.com")
+
+        elif 'play on spotify' in command:
+            query = command.replace("play on spotify", "")
+            speak(f"Playing {query} on Spotify")
+            webbrowser.open(f"https://open.spotify.com/search/{query}")
+            time.sleep(5)  # Wait for the page to load
+            pyautogui.click(x=1037, y=574) # Adjust these coordinates if necessary
 
         elif 'wikipedia' in command:
             speak('Searching Wikipedia...')

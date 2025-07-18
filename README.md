@@ -21,7 +21,7 @@ This is a simple AI speech assistant, inspired by J.A.R.V.I.S., that can perform
 *   **Email**: Send emails through your configured account.
 
 ### Entertainment
-*   **Music**: Play music from a local directory.
+*   **Music**: Play music from a local directory or on Spotify.
 
 ## Setup and Usage
 
@@ -60,6 +60,7 @@ This is a simple AI speech assistant, inspired by J.A.R.V.I.S., that can perform
 *   `"open youtube"`: Opens YouTube in your default web browser.
 *   `"search on google [your query]"`: Searches Google for your query.
 *   `"open google"`: Opens Google in your default web browser.
+*   `"play on spotify [song name]"`: Searches for a song on Spotify and clicks the play button. **Note:** You may need to adjust the coordinates in `main.py` for the click to work correctly on your screen. To find the correct coordinates, run the `get_mouse_coords.py` script.
 *   `"wikipedia [your query]"`: Searches Wikipedia for your query and reads a summary.
 *   `"calculate [expression]"`: Performs a mathematical calculation.
 *   `"time"`: Tells you the current time.
