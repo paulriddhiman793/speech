@@ -21,6 +21,7 @@ This is a simple AI speech assistant, inspired by J.A.R.V.I.S., that can perform
 *   **Chat**: Have a conversation with the assistant.
 *   **News**: Get the latest world and financial news.
 *   **Email**: Send emails through your configured account.
+*   **GitHub**: Summarize public GitHub repositories.
 
 ### Entertainment
 *   **Music**: Play music from a local directory or on Spotify.
@@ -34,7 +35,17 @@ This is a simple AI speech assistant, inspired by J.A.R.V.I.S., that can perform
     pip install -r requirements.txt
     ```
 
-3.  **Add Music**: Place your favorite music files (e.g., `.mp3` files) into the `music` directory.
+3.  **Configuration**:
+    *   Create a file named `.env` in the project directory.
+    *   Add your API keys and credentials to the `.env` file in the following format:
+        ```
+        GROQ_API_KEY="YOUR_GROQ_API_KEY"
+        NEWS_API_KEY="YOUR_NEWS_API_KEY"
+        GITHUB_TOKEN="YOUR_GITHUB_TOKEN"
+        EMAIL_USER="YOUR_EMAIL_ADDRESS"
+        EMAIL_PASSWORD="YOUR_EMAIL_PASSWORD"
+        ```
+    *   **Music**: Add your music files to the `music` directory.
 
 4.  **Run the Assistant**: Execute the main script to start the assistant:
     ```bash
@@ -68,6 +79,7 @@ This is a simple AI speech assistant, inspired by J.A.R.V.I.S., that can perform
 *   `"time"`: Tells you the current time.
 *   `"define [word]"`: Looks up the definition of a word.
 *   `"send email"`: Initiates sending an email.
+*   `"summarize github"`: Starts the GitHub repository summarization process.
 
 ### Entertainment
 *   `"play music"`: Plays a song from the `music` directory.
@@ -94,25 +106,4 @@ To use a specific Chrome profile for web searches, you need to configure the `ch
     *   In the address bar, type `chrome://version` and press Enter.
     *   Look for the "Profile Path" field. The profile directory name is the last part of the path (e.g., "Profile 1").
 
-## News API Key Configuration
-
-To use the news functionality, you must set the following environment variable:
-
-*   `NEWS_API_KEY`: Your News API key. You can get a free developer key from [https://newsapi.org/](https://newsapi.org/) by registering for an account.
-
-## Groq API Key Configuration
-
-To use the chat functionality, you must set the following environment variable:
-
-*   `GROQ_API_KEY`: Your Groq Cloud API key.
-
-## Email Configuration
-
-To use the email functionality, you must set the following environment variables:
-
-*   `EMAIL_USER`: Your email address.
-*   `EMAIL_PASSWORD`: Your email password or an app-specific password.
-
-**Note:** For security reasons, it is highly recommended to use an app-specific password if you have two-factor authentication enabled on your email account.
-
---
+---

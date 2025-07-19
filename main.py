@@ -16,6 +16,11 @@ import requests
 import yagmail
 from groq import Groq
 from newsapi import NewsApiClient
+from github import Github
+import pyperclip
+from dotenv import load_dotenv
+
+load_dotenv()
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -98,6 +103,70 @@ def get_financial_news():
     except Exception as e:
         print(f"Error in get_financial_news: {e}")
         speak("Sorry, I could not fetch the financial news.")
+
+
+def summarize_github_repo():
+    """Summarizes a public GitHub repository from a URL provided in the terminal."""
+    speak("Please paste the GitHub repository URL in the terminal and press Enter.")
+    repo_url = input("Enter the GitHub repository URL: ")
+
+    if not repo_url or "github.com" not in repo_url:
+        speak("No valid GitHub URL was provided.")
+        return
+
+    try:
+        speak("Summarizing the repository. This may take a moment.")
+        # Extract owner and repo name from URL
+        repo_url = repo_url.strip()
+        if repo_url.endswith('.git'):
+            repo_url = repo_url[:-4]
+        parts = repo_url.replace("https://github.com/", "").split("/")
+        owner, repo_name = parts[0], parts[1]
+
+        github_token = os.environ.get("GITHUB_TOKEN")
+        g = Github(github_token)
+        repo = g.get_repo(f"{owner}/{repo_name}")
+
+        contents = []
+        queue = [repo.get_contents("")]
+        while queue:
+            dir_contents = queue.pop(0)
+            for content_file in dir_contents:
+                if content_file.type == "dir":
+                    queue.append(repo.get_contents(content_file.path))
+                else:
+                    try:
+                        # Only include common text-based files
+                        if content_file.name.endswith(('.py', '.js', '.html', '.css', '.md', '.txt')):
+                            contents.append(content_file.decoded_content.decode('utf-8'))
+                    except Exception:
+                        pass  # Ignore files that can't be decoded
+
+        full_content = "\n".join(contents)
+        
+        # Summarize with Groq
+        client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {
+                    "role": "system",
+                    "content": "Summarize the following code from a GitHub repository. Provide a high-level overview of the project's purpose, main technologies used, and key functionalities."
+                },
+                {
+                    "role": "user",
+                    "content": full_content[:8000] # Limit to avoid exceeding token limits
+                }
+            ],
+            model="meta-llama/llama-4-scout-17b-16e-instruct",
+        )
+        summary = chat_completion.choices[0].message.content
+
+        print(f"Repository Summary:\n{summary}")
+        speak(summary)
+
+    except Exception as e:
+        print(f"Error summarizing GitHub repo: {e}")
+        speak("Sorry, I could not summarize the repository. Please check the URL.")
 
 
 def listen_for_command():
@@ -345,6 +414,9 @@ if __name__ == "__main__":
 
         elif 'financial news' in command:
             get_financial_news()
+
+        elif 'summarise github' in command:
+            summarize_github_repo()
 
         else:
             chat_with_groq(command)
