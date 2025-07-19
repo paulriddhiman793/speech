@@ -37,16 +37,16 @@ def open_with_profile(url):
 def wish_me():
     hour = int(datetime.datetime.now().hour)
     if hour >= 0 and hour < 12:
-        speak("Good Morning!")
+        speak("Good Morning, Riddhiman!")
     elif hour >= 12 and hour < 18:
-        speak("Good Afternoon!")
+        speak("Good Afternoon, Riddhiman!")
     else:
-        speak("Good Evening!")
+        speak("Good Evening, Riddhiman!")
     speak("I am Jarvis. Please tell me how may I help you")
 
 
 def chat_with_groq(query):
-    """Sends a query to the Groq API and speaks the response."""
+    """Sends a query to the Groq API, prints the response, and speaks it."""
     try:
         client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
         chat_completion = client.chat.completions.create(
@@ -59,6 +59,7 @@ def chat_with_groq(query):
             model="meta-llama/llama-4-scout-17b-16e-instruct",
         )
         response = chat_completion.choices[0].message.content
+        print(f"Jarvis: {response}")
         speak(response)
     except Exception as e:
         print(f"Error in chat_with_groq: {e}")
@@ -100,12 +101,16 @@ def get_financial_news():
 
 
 def listen_for_command():
-    """Listens for a command from the user and returns it as text."""
+    """Listens for a command, handles errors, and returns the command as text."""
     r = sr.Recognizer()
     with sr.Microphone() as source:
         print("Listening...")
         r.pause_threshold = 1
-        audio = r.listen(source)
+        try:
+            audio = r.listen(source, timeout=5, phrase_time_limit=5)
+        except sr.WaitTimeoutError:
+            print("Timeout waiting for phrase to start")
+            return "None"
 
     try:
         print("Recognizing...")
@@ -113,7 +118,8 @@ def listen_for_command():
         print(f"User said: {query}\n")
         return query.lower()
     except sr.UnknownValueError:
-        speak("Sorry, I did not understand that.")
+        # This error is intentionally not spoken to avoid interrupting the user.
+        print("Google Speech Recognition could not understand audio")
         return "None"
     except sr.RequestError as e:
         speak(f"Could not request results from Google Speech Recognition service; {e}")
